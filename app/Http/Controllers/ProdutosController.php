@@ -94,12 +94,28 @@ class ProdutosController extends Controller
             }
     }
 
-    public function mais(){
+    public function mais(Request $req){
 
+        $idProduto=$req->id;
+        $produto=Produto::where('id_produto',$idProduto)->first();
+        $prd['stock']=$produto->stock+1;
+        $produto->update($prd);
 
+        return redirect()->route('produtos.show',[
+            'id'=>$idProduto
+        ]);
+        
     }
 
-    public function menos(){
+    public function menos(Request $req){
 
+        $idProduto=$req->id;
+        $produto=Produto::where('id_produto',$idProduto)->first();
+        $prd['stock']=$produto->stock-1;
+        $produto->update($prd);
+
+        return redirect()->route('produtos.show',[
+            'id'=>$idProduto
+        ]);
     }
 }

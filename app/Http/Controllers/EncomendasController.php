@@ -25,9 +25,12 @@ class EncomendasController extends Controller
     public function show(Request $r){
 
         $idEncomenda = $r->id;
+        $relacao= EncomendaProduto::where('id_encomenda',$idEncomenda)->with('produto')->get();
+        
         $encomendas = Encomenda::where('id_encomenda',$idEncomenda)->with(['cliente','vendedor','produtos'])->first();
 		return view('encomendas.show',[
-			'encomendas'=>$encomendas
+            'encomendas'=>$encomendas,
+            'relacao'=>$relacao
 		]);
     }
 
@@ -68,6 +71,7 @@ class EncomendasController extends Controller
 
         $produtos=Produto::all();
         $encomenda=$req->id;
+        
 
         return view('encomendas.createProduto',[
             'produtos'=>$produtos,
@@ -79,6 +83,7 @@ class EncomendasController extends Controller
     public function storeProduto(Request $req){
 
         $encomenda=$req->id;
+        
         $novoProduto=$req->validate([
             'id_produto'=>['numeric','required'],
             'preco'=>['required','min:1','max:3'],
@@ -92,5 +97,59 @@ class EncomendasController extends Controller
             'id'=>$encomenda
         ]);
         
+    }
+
+    public function editProduto(Request $req){
+
+        $produtos=Produto::all();
+        $idEncomenda=$req->id;
+        $idProduto=$req->idp;
+        $relacao= EncomendaProduto::where('id_encomenda',$idEncomenda)->where('id_produto',$idProduto)->first();
+
+        return view('encomendas.editProduto',[
+           'produtos'=>$produtos,
+           'encomenda'=>$idEncomenda,
+           'relacao'=>$relacao
+        ]);
+
+    }
+
+    public function updateProduto(Request $req){
+        
+        $idEncomenda=$req->id;
+        $idProduto=$req->idp;
+        $novo= EncomendaProduto::where('id_encomenda',$idEncomenda)->where('id_produto',$idProduto)->first();
+
+        $editarProduto=$req->validate([
+            'id_produto'=>['numeric','required'],
+            'preco'=>['required','min:1','max:3'],
+            'quantidade'=>['required','min:1','max:200']
+        ]);
+       
+        $editarProduto['id_encomenda']=$idEncomenda;
+        $novo->update($editarProduto);
+
+
+        return redirect()->route('encomendas.show',[
+            'id'=>$idEncomenda
+        ]);
+
+    }
+
+    public function destroy(Request $req){
+
+        $idEncomenda=$req->id;
+        $idProduto=$req->idp;
+        $eliminar= EncomendaProduto::where('id_encomenda',$idEncomenda)->where('id_produto',$idProduto)->first();
+
+        if(is_null($eliminar)){
+
+            return redirect()->route('encomendas.show',['id'=>$idEncomenda])->with('vermelho','O produto não existe');
+        }
+        else{
+
+            $eliminar->delete();
+            return redirect()->route('encomendas.show',['id'=>$idEncomenda])->with('vermelho','Produto eliminado');
+        }
     }
 }

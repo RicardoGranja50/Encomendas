@@ -45,7 +45,7 @@ class ClientesController extends Controller
 
         $novoCliente=$req->validate([
             'nome'=>['required','min:3','max:100'],
-            'morada'=>['required','min:5','max:100'],
+            'morada'=>['required','min:3','max:100'],
             'telefone'=>['required','min:9','max:13'],
             'email'=>['required','min:5','max:200']
         ]);

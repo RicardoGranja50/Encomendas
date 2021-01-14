@@ -62,6 +62,11 @@ Route::get('encomendas/create/produto/{id}','App\Http\Controllers\EncomendasCont
 
 Route::post('encomendas/store/produto/{id}','App\Http\Controllers\EncomendasController@storeProduto')->name('encomendas.store.produto');
 
+Route::get('encomendas/edit/produto/{id}/{idp}','App\Http\Controllers\EncomendasController@editProduto')->name('encomendas.edit.produto');
+
+Route::post('encomendas/update/produto/{id}/{idp}','App\Http\Controllers\EncomendasController@updateProduto')->name('encomendas.update.produto');
+
+
 
 
 Route::get('produtos/create','App\Http\Controllers\ProdutosController@create')->name('produtos.create');
@@ -70,9 +75,14 @@ Route::post('produtos/store','App\Http\Controllers\ProdutosController@store')->n
 
 
 
-Route::post('produtos/stock/mais','App\Http\Controllers\ProdutosController@mais')->name('produtos.stock.mais');
 
-Route::post('produtos/stock/menos','App\Http\Controllers\ProdutosController@menos')->name('produtos.stock.menos');
+
+Route::get('produtos/stock/mais/{id}','App\Http\Controllers\ProdutosController@mais')->name('produtos.stock.mais');
+
+Route::get('produtos/stock/menos/{id}','App\Http\Controllers\ProdutosController@menos')->name('produtos.stock.menos');
+
+
+
 
 
 Route::get('produtos/edit','App\Http\Controllers\ProdutosController@edit')->name('produtos.edit');
@@ -92,3 +102,8 @@ Route::get('vendedores/edit','App\Http\Controllers\VendedoresController@edit')->
 Route::patch('vendedores/update','App\Http\Controllers\VendedoresController@update')->name('vendedores.update');
 
 Route::get('vendedores/destroy/{id}','App\Http\Controllers\VendedoresController@destroy')->name('vendedores.destroy');
+
+
+
+
+Route::get('encomendas/destroy/{id}/{idp}','App\Http\Controllers\EncomendasController@destroy')->name('encomendas.destroy.produto');

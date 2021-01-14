@@ -43,5 +43,8 @@
         @yield('conteudo')
         <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
         <link rel="stylesheet" href="{{asset('css/all.min.css')}}">
+        <script  src="{{asset('js/all.min.js')}}"></script>
+        <script  src="{{asset('js/bootstrap.min.js')}}"></script>
+        <script  src="{{asset('js/jquery-3.5.1.min.js')}}"></script>
     </body>
 </html>
