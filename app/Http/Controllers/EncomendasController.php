@@ -84,9 +84,9 @@ class EncomendasController extends Controller
             'preco'=>['required','min:1','max:3'],
             'quantidade'=>['required','min:1','max:200']
         ]);
-            ///fiquei aqui (perguntar na proxima aula sobre add id encomenda)
+       
+        $novoProduto['id_encomenda']=$encomenda;
         $produto=EncomendaProduto::create($novoProduto);
-        $produto->encomenda()->attach($encomenda);
 
         return redirect()->route('encomendas.show',[
             'id'=>$encomenda
