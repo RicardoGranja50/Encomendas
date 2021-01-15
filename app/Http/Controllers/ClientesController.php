@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cliente;
 use App\Models\Encomenda;
+use Mail;
+use App\Mail\Notificacao;
 
 class ClientesController extends Controller
 {
@@ -13,6 +15,13 @@ class ClientesController extends Controller
 
         return view('clientes.principal');
 
+    }
+
+    public function email(){
+
+        $clientes=Cliente::all();
+        Mail::to('1a66220c6f-7bb7a4@inbox.mailtrap.io')->send(new Notificacao );
+        return redirect()->route('clientes.index')->with('verde','Email enviado');
     }
 
     public function index(){
@@ -26,6 +35,7 @@ class ClientesController extends Controller
 
     public function show(Request $r){
 
+        
         $idCliente = $r->id;
 
         $clientes = Cliente::where('id_cliente',$idCliente)->with('encomenda')->first();

@@ -106,4 +106,8 @@ Route::get('vendedores/destroy/{id}','App\Http\Controllers\VendedoresController@
 
 
 
-Route::get('encomendas/destroy/{id}/{idp}','App\Http\Controllers\EncomendasController@destroy')->name('encomendas.destroy.produto');
+Route::get('encomendas/destroy/{id}/{idp}','App\Http\Controllers\EncomendasController@destroyProduto')->name('encomendas.destroy.produto');
+
+
+Route::get('clientes/email/{id}','App\Http\Controllers\ClientesController@email')->name('clientes.email');
+

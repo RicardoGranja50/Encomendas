@@ -132,11 +132,11 @@ class EncomendasController extends Controller
 
         return redirect()->route('encomendas.show',[
             'id'=>$idEncomenda
-        ]);
+        ])->with('verde','Produto editado');
 
     }
 
-    public function destroy(Request $req){
+    public function destroyProduto(Request $req){
 
         $idEncomenda=$req->id;
         $idProduto=$req->idp;
@@ -150,6 +150,25 @@ class EncomendasController extends Controller
 
             $eliminar->delete();
             return redirect()->route('encomendas.show',['id'=>$idEncomenda])->with('vermelho','Produto eliminado');
+        }
+    }
+
+    public function destroy(Request $req){
+
+        $idEncomenda=$req->id;
+        $eliminar= EncomendaProduto::where('id_encomenda',$idEncomenda)->get();
+        $eliminar2= Encomenda::where('id_encomenda',$idEncomenda)->first();
+        if(is_null($eliminar)){
+
+            return redirect()->route('encomendas.show',['id'=>$idEncomenda])->with('vermelho','A encomenda não existe');
+        }
+        else{
+            foreach($eliminar as $delete){
+                $delete->delete();
+            }
+            
+            $eliminar2->delete();
+            return redirect()->route('encomendas.index')->with('vermelho','Encomenda eliminado');
         }
     }
 }

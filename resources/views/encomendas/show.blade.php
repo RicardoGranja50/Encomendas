@@ -24,5 +24,5 @@
 </ul>
 <br>
 <a href="{{route('encomendas.create.produto',['id'=>$encomendas->id_encomenda])}}" class="btn btn-primary">Adicionar Produto</a>
-
+<a href="{{route('encomendas.delete',['id'=>$encomendas->id_encomenda])}}" class="btn btn-primary">Eliminar Encomenda</a>
 @endsection

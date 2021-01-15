@@ -16,4 +16,5 @@
 <br>
 <a href="{{route('clientes.edit',['id'=>$clientes->id_cliente])}}" class="btn btn-primary">Editar Cliente</a>
 <a href="{{route('clientes.destroy',['id'=>$clientes->id_cliente])}}" class="btn btn-primary">Eliminar Cliente</a>
+<a href="{{route('clientes.email',['id'=>$clientes->id_cliente])}}" class="btn btn-primary">Enviar por email</a>
 @endsection
