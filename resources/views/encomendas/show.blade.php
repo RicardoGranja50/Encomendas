@@ -13,16 +13,19 @@
     @foreach($relacao as $produto)
     
     <li><b>Produto: </b><a href="{{route('produtos.show',['id'=>$produto->id_produto])}}">{{$produto->produto->designacao}}</a> 
-    
-    <a href="{{route('encomendas.edit.produto',['id'=>$encomendas->id_encomenda,'idp'=>$produto->id_produto])}}"><i class="fas fa-pencil-alt"></i></a>
-    
-    <a href="{{route('encomendas.destroy.produto',['id'=>$encomendas->id_encomenda,'idp'=>$produto->id_produto])}}"><i class="fas fa-trash"></i></a>
+    @if(Gate::allows('admin'))
+        <a href="{{route('encomendas.edit.produto',['id'=>$encomendas->id_encomenda,'idp'=>$produto->id_produto])}}"><i class="fas fa-pencil-alt"></i></a>
+        
+        <a href="{{route('encomendas.destroy.produto',['id'=>$encomendas->id_encomenda,'idp'=>$produto->id_produto])}}"><i class="fas fa-trash"></i></a>
+    @endif
     </li>
     <li>Quantidade: {{$produto->quantidade}}</li>
     <li>Preço: {{$produto->preco}}</li><br>
     @endforeach
 </ul>
 <br>
-<a href="{{route('encomendas.create.produto',['id'=>$encomendas->id_encomenda])}}" class="btn btn-primary">Adicionar Produto</a>
-<a href="{{route('encomendas.delete',['id'=>$encomendas->id_encomenda])}}" class="btn btn-primary">Eliminar Encomenda</a>
+@if(Gate::allows('admin'))
+    <a href="{{route('encomendas.create.produto',['id'=>$encomendas->id_encomenda])}}" class="btn btn-primary">Adicionar Produto</a>
+    <a href="{{route('encomendas.delete',['id'=>$encomendas->id_encomenda])}}" class="btn btn-primary">Eliminar Encomenda</a>
+@endif
 @endsection

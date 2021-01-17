@@ -13,5 +13,7 @@
 	</li>
 @endforeach
 </ul>
-<a href="{{route('produtos.create')}}" class="btn btn-primary">Adicionar Produto</a>
+@if(Gate::allows('admin'))
+	<a href="{{route('produtos.create')}}" class="btn btn-primary">Adicionar Produto</a>
+@endif
 @endsection

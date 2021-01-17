@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 15-Jan-2021 às 18:22
--- Versão do servidor: 10.1.38-MariaDB
--- versão do PHP: 7.3.2
+-- Tempo de geração: 16-Jan-2021 às 13:11
+-- Versão do servidor: 10.4.14-MariaDB
+-- versão do PHP: 7.3.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `encomendas`
+-- Banco de dados: `encomendas`
 --
 
 -- --------------------------------------------------------
@@ -35,20 +34,21 @@ CREATE TABLE `clientes` (
   `telefone` varchar(13) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL
+  `created_at` timestamp NULL DEFAULT NULL,
+  `foto_cliente` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `clientes`
 --
 
-INSERT INTO `clientes` (`id_cliente`, `nome`, `morada`, `telefone`, `email`, `updated_at`, `created_at`) VALUES
-(1, 'José Alves', 'Rua 25 de Abril', '913345665', 'jalves@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00'),
-(2, 'Antonio Pereira', 'Rua Nuno Alveres', '913334442', 'apereira@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00'),
-(3, 'Rafael Ferreira', 'Rua Vasco da gama', '913346665', 'rferreira@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00'),
-(4, 'João Manuel', 'Rua da ponte', '918976253', 'jmanuel@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00'),
-(5, 'Inês Fonseca', 'Rua António Palha', '913678925', 'ifonseca@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00'),
-(6, 'Ricardo', 'S.Salvador', '939236400', 'ricapt555@gmail.com', '2021-01-08 16:18:39', '2021-01-08 15:52:41');
+INSERT INTO `clientes` (`id_cliente`, `nome`, `morada`, `telefone`, `email`, `updated_at`, `created_at`, `foto_cliente`) VALUES
+(1, 'José Alves', 'Rua 25 de Abril', '913345665', 'jalves@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00', NULL),
+(2, 'Antonio Pereira', 'Rua Nuno Alveres', '913334442', 'apereira@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00', NULL),
+(3, 'Rafael Ferreira', 'Rua Vasco da gama', '913346665', 'rferreira@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00', NULL),
+(4, 'João Manuel', 'Rua da ponte', '918976253', 'jmanuel@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00', NULL),
+(5, 'Inês Fonseca', 'Rua António Palha', '913678925', 'ifonseca@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00', NULL),
+(6, 'Ricardo', 'S.Salvador', '939236400', 'ricapt555@gmail.com', '2021-01-08 16:18:39', '2021-01-08 15:52:41', NULL);
 
 -- --------------------------------------------------------
 
@@ -58,8 +58,8 @@ INSERT INTO `clientes` (`id_cliente`, `nome`, `morada`, `telefone`, `email`, `up
 
 CREATE TABLE `encomendas` (
   `id_encomenda` int(11) NOT NULL,
-  `id_cliente` int(11) DEFAULT '0',
-  `id_vendedor` int(11) DEFAULT '0',
+  `id_cliente` int(11) DEFAULT 0,
+  `id_vendedor` int(11) DEFAULT 0,
   `data` date DEFAULT NULL,
   `observacoes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -84,9 +84,9 @@ CREATE TABLE `encomendas_produtos` (
   `id_enc_prod` int(11) NOT NULL,
   `id_produto` int(11) NOT NULL,
   `id_encomenda` int(11) NOT NULL,
-  `quantidade` int(11) DEFAULT '0',
-  `preco` double DEFAULT '0',
-  `desconto` double DEFAULT '0',
+  `quantidade` int(11) DEFAULT 0,
+  `preco` double DEFAULT 0,
+  `desconto` double DEFAULT 0,
   `obervacoes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL
@@ -120,8 +120,8 @@ CREATE TABLE `migrations` (
 CREATE TABLE `produtos` (
   `id_produto` int(11) NOT NULL,
   `designacao` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `stock` int(9) DEFAULT '0',
-  `preco` double DEFAULT '0',
+  `stock` int(9) DEFAULT 0,
+  `preco` double DEFAULT 0,
   `observacoes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL
@@ -134,7 +134,7 @@ CREATE TABLE `produtos` (
 INSERT INTO `produtos` (`id_produto`, `designacao`, `stock`, `preco`, `observacoes`, `updated_at`, `created_at`) VALUES
 (1, 'TV LG', 100, 150, NULL, '2021-01-15 16:07:34', '2020-12-02 00:00:00'),
 (2, 'TV SONY', 200, 50, NULL, '2020-12-25 00:00:00', '2020-12-31 00:00:00'),
-(3, 'PC ASUS', 50, 250, NULL, '2020-12-04 00:00:00', '2020-12-30 00:00:00'),
+(3, 'PC ASUS', 51, 250, NULL, '2021-01-16 10:40:47', '2020-12-30 00:00:00'),
 (4, 'Apple iPhone', 200, 2222, NULL, '2021-01-15 16:51:07', '2020-12-31 00:00:00');
 
 -- --------------------------------------------------------
@@ -181,93 +181,93 @@ INSERT INTO `vendedores` (`id_vendedor`, `nome`, `especialidade`, `email`, `upda
 (5, 'Tiago Machado', 'Bicicletas', 'tmachado@gmail.com', '2020-11-05 00:00:00', '2020-11-05 00:00:00');
 
 --
--- Indexes for dumped tables
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `clientes`
+-- Índices para tabela `clientes`
 --
 ALTER TABLE `clientes`
   ADD PRIMARY KEY (`id_cliente`);
 
 --
--- Indexes for table `encomendas`
+-- Índices para tabela `encomendas`
 --
 ALTER TABLE `encomendas`
   ADD PRIMARY KEY (`id_encomenda`);
 
 --
--- Indexes for table `encomendas_produtos`
+-- Índices para tabela `encomendas_produtos`
 --
 ALTER TABLE `encomendas_produtos`
   ADD PRIMARY KEY (`id_enc_prod`);
 
 --
--- Indexes for table `migrations`
+-- Índices para tabela `migrations`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `produtos`
+-- Índices para tabela `produtos`
 --
 ALTER TABLE `produtos`
   ADD PRIMARY KEY (`id_produto`);
 
 --
--- Indexes for table `users`
+-- Índices para tabela `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `vendedores`
+-- Índices para tabela `vendedores`
 --
 ALTER TABLE `vendedores`
   ADD PRIMARY KEY (`id_vendedor`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `clientes`
+-- AUTO_INCREMENT de tabela `clientes`
 --
 ALTER TABLE `clientes`
   MODIFY `id_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `encomendas`
+-- AUTO_INCREMENT de tabela `encomendas`
 --
 ALTER TABLE `encomendas`
-  MODIFY `id_encomenda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_encomenda` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `encomendas_produtos`
+-- AUTO_INCREMENT de tabela `encomendas_produtos`
 --
 ALTER TABLE `encomendas_produtos`
-  MODIFY `id_enc_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_enc_prod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `migrations`
+-- AUTO_INCREMENT de tabela `migrations`
 --
 ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `produtos`
+-- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
   MODIFY `id_produto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `vendedores`
+-- AUTO_INCREMENT de tabela `vendedores`
 --
 ALTER TABLE `vendedores`
   MODIFY `id_vendedor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Produto;
+use Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ProdutosController extends Controller
 {
@@ -11,111 +13,195 @@ class ProdutosController extends Controller
 
     public function index(){
 
-        $produtos = Produto::all();
+        if(auth()->check()){
+            $produtos = Produto::all();
 
-		return view ('produtos.index', [
-			'produtos'=>$produtos
-		]);
+    		return view ('produtos.index', [
+    			'produtos'=>$produtos
+    		]);
+        }
+        else{
+            return view('home');
+        }
     }
 
     public function show(Request $r){
 
-        $idProduto = $r->id;
+        if(auth()->check()){
+            $idProduto = $r->id;
 
-        $produtos = Produto::where('id_produto',$idProduto)->with('encomendas')->first();
+            $produtos = Produto::where('id_produto',$idProduto)->with('encomendas')->first();
 
-		return view('produtos.show',[
-			'produtos'=>$produtos
-		]);
+    		return view('produtos.show',[
+    			'produtos'=>$produtos
+    		]);
+        }
+        else{
+            return view('home');
+        }
     }
 
     public function create(){
-
-         return view('produtos.create');
+        if(auth()->check()){
+            if(Gate::allows('admin')){
+                return view('produtos.create');
+            }
+            else{
+                 return redirect()->route('produtos.index')->with('vermelho','Nao tem permissao');
+            }
+        }
+        else{
+            return view('home');
+        }
     }
 
     public function store(Request $req){
+        if(auth()->check()){
 
-        $novoProduto=$req->validate([
-            'designacao'=>['required','min:3','max:100'],
-            'preco'=>['required','min:1','max:100'],
-            'stock'=>['required','min:1','max:13'],
-            'observacoes'=>['nullable','min:5','max:200']
-        ]);
+            if(Gate::allows('admin')){
+                $novoProduto=$req->validate([
+                    'designacao'=>['required','min:3','max:100'],
+                    'preco'=>['required','min:1','max:100'],
+                    'stock'=>['required','min:1','max:13'],
+                    'observacoes'=>['nullable','min:5','max:200']
+                ]);
 
-        $produto=Produto::create($novoProduto);
+                $produto=Produto::create($novoProduto);
 
-        return redirect()->route('produtos.show',[
-            'id'=>$produto->id_produto
-        ])->with('verde','Produto Criado');
+                return redirect()->route('produtos.show',[
+                    'id'=>$produto->id_produto
+                ])->with('verde','Produto Criado');
+            }
+            else{
+                return redirect()->route('produtos.index')->with('vermelho','Nao tem permissao');
+            }
+        }
+        else{
+            return view('home');
+        }
     }
 
     public function edit(Request $req){
 
-        $idProduto=$req->id;
-        $produto=Produto::where('id_produto',$idProduto)->first();
+        if(auth()->check()){
 
-        return view('produtos.edit',[
-           'produto'=>$produto
-        ]);
+            if(Gate::allows('admin')){
+                $idProduto=$req->id;
+                $produto=Produto::where('id_produto',$idProduto)->first();
+
+                return view('produtos.edit',[
+                   'produto'=>$produto
+                ]);
+            }
+            else{
+                 return redirect()->route('produtos.index')->with('vermelho','Nao tem permissao');
+            }
+        }
+        else{
+            return view('home');
+        }
     }
 
      public function update(Request $req){
 
-        $idProduto=$req->id;
-        $produto=Produto::where('id_produto',$idProduto)->first();
+        if(auth()->check()){
 
-        $editarProduto=$req->validate([
-            'designacao'=>['required','min:3','max:100'],
-            'preco'=>['required','min:1','max:100'],
-            'stock'=>['required','min:1','max:100'],
-            'observacoes'=>['nullable','min:5','max:200']
-        ]);
-        
-        $produto->update($editarProduto);
+            if(Gate::allows('admin')){
+                $idProduto=$req->id;
+                $produto=Produto::where('id_produto',$idProduto)->first();
 
-        return redirect()->route('produtos.show',[
-            'id'=>$produto->id_produto
-        ])->with('verde','Produto editado');
+                $editarProduto=$req->validate([
+                    'designacao'=>['required','min:3','max:100'],
+                    'preco'=>['required','min:1','max:100'],
+                    'stock'=>['required','min:1','max:100'],
+                    'observacoes'=>['nullable','min:5','max:200']
+                ]);
+                
+                $produto->update($editarProduto);
+
+                return redirect()->route('produtos.show',[
+                    'id'=>$produto->id_produto
+                ])->with('verde','Produto editado');
+            }
+            else{
+                return redirect()->route('produtos.index')->with('vermelho','Nao tem permissao');
+            }
+        }
+        else{
+            return view('home');
+        }
     }
 
     public function destroy(Request $r){
         
-        $produto= Produto::where('id_produto', $r->id)->first();
+        if(auth()->check()){
 
-        if(is_null($produto)){
+            if(Gate::allows('admin')){
+                $produto= Produto::where('id_produto', $r->id)->first();
 
-                return redirect()->route('produtos.index')->with('vermelho','O Produto não existe');
+                if(is_null($produto)){
+
+                        return redirect()->route('produtos.index')->with('vermelho','O Produto não existe');
+                    }
+                    else{
+
+                        $produto->delete();
+                        return redirect()->route('produtos.index')->with('vermelho','Produto eliminado');
+                    }
             }
             else{
-
-                $produto->delete();
-                return redirect()->route('produtos.index')->with('vermelho','Produto eliminado');
+                return redirect()->route('produtos.index')->with('vermelho','Nao tem permissao');
             }
+        }
+        else{
+            return view('home');
+        }
     }
 
     public function mais(Request $req){
 
-        $idProduto=$req->id;
-        $produto=Produto::where('id_produto',$idProduto)->first();
-        $prd['stock']=$produto->stock+1;
-        $produto->update($prd);
+        if(auth()->check()){
 
-        return redirect()->route('produtos.show',[
-            'id'=>$idProduto
-        ]);
+            if(Gate::allows('admin')){
+                $idProduto=$req->id;
+                $produto=Produto::where('id_produto',$idProduto)->first();
+                $prd['stock']=$produto->stock+1;
+                $produto->update($prd);
+
+                return redirect()->route('produtos.show',[
+                    'id'=>$idProduto
+                ]);
+            }
+            else{
+                return redirect()->route('produtos.index')->with('vermelho','Nao tem permissao');
+            }
+        }
+        else{
+            return view('home');
+        }
         
     }
 
     public function menos(Request $req){
 
-        $idProduto=$req->id;
-        $produto=Produto::where('id_produto',$idProduto)->first();
-        $prd['stock']=$produto->stock-1;
-        $produto->update($prd);
+        if(auth()->check()){
 
-        return redirect()->route('produtos.show',[
-            'id'=>$idProduto
-        ]);
+            if(Gate::allows('admin')){
+                $idProduto=$req->id;
+                $produto=Produto::where('id_produto',$idProduto)->first();
+                $prd['stock']=$produto->stock-1;
+                $produto->update($prd);
+
+                return redirect()->route('produtos.show',[
+                    'id'=>$idProduto
+                ]);
+            }
+            else{
+                 return redirect()->route('produtos.index')->with('vermelho','Nao tem permissao');
+            }
+        }
+        else{
+            return view('home');
+        }
     }
 }

@@ -13,5 +13,8 @@
 	</li>
 @endforeach
 </ul>
-<a href="{{route('vendedores.create')}}" class="btn btn-primary">Vendedor Produto</a>
+
+@if(Gate::allows('admin'))
+	<a href="{{route('vendedores.create')}}" class="btn btn-primary">Adicionar vendededor</a>
+@endif
 @endsection

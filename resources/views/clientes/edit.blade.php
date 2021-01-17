@@ -3,7 +3,7 @@
 
 @endsection
 @section('conteudo')
-    <form action="{{route('clientes.update', ['id'=>$cliente->id_cliente])}}"enctype="multipart/form-data" method="post">
+    <form action="{{route('clientes.update', ['id'=>$cliente->id_cliente])}}" enctype="multipart/form-data" method="post">
         @csrf
         @method('patch')
         
@@ -33,6 +33,12 @@
                 @if($errors->has('email'))
                     <b style="color:red">O email deve ser entre 5 e 200 caracteres</b><br>
                 @endif
+
+                Foto: <input type="file" name="foto_cliente" value="{{$cliente->foto_cliente}}"><br><br>
+                @if($errors->has('foto_cliente'))
+                    <b style="color:red">Insira uma foto</b><br>
+                @endif
+
                 <input type="submit" value="enviar" class="btn btn-primary">
         </div>
     </form>

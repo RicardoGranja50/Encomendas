@@ -22,7 +22,8 @@ class Cliente extends Model
         'nome',
         'morada',
         'telefone',
-        'email'
+        'email',
+        'foto_cliente'
 
     ];
 }

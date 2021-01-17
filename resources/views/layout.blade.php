@@ -19,6 +19,19 @@
                     <a class="navbar-brand" href="{{route('produtos.index')}}" id="hover">Produtos</a>
                     <a class="navbar-brand" href="{{route('vendedores.index')}}" id="hover">Vendedores</a>
                     <a class="navbar-brand" href="{{route('formulario')}}" id="hover">Pesquisa</a>
+                     @if(auth()->check()) 
+      <a class="navbar-brand" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+      @else
+      <a class="nav-item nav-link" href="{{route('home')}}">Login</a>
+      @endif
                 </div>
             </div>
         </nav>
